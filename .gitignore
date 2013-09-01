@@ -1,0 +1,5 @@
+#compiled s-ource #
+*.pyc
+.DS_Store
+#bin folder
+bin/**/*
