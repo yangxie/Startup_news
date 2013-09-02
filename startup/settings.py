@@ -114,6 +114,8 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'tastypie',
+    'rest_framework',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -155,3 +157,5 @@ LOGGING = {
         },
     }
 }
+
+DEFAULT_CHARSET = 'utf-8'
