@@ -17,3 +17,6 @@ class News(models.Model):
     URL = CharField(max_length=200)
     coupon = CharField(max_length=50, blank=True, null=True)
     status = SmallIntegerField(default=1)
+    
+    def __unicode__(self):
+        return self.name
