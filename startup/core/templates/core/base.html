@@ -1,0 +1,165 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>EventSonar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <script type="text/javascript" src="{% static 'jquery-1.10.2.min.js' %}"></script>
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="{% static 'underscore-min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'backbone-min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <style type="text/css">
+      .event {
+	  padding:3px;
+      }
+      .navbar {
+	    opacity:0.8;
+      }
+      .navbar .navbar-inner {
+	    -moz-box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
+	      -webkit-box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
+	        -o-box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
+		  box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
+      }
+      .nav-text {     
+	    font-family:"open sans";
+	      font-size: 16px;
+	        font-weight: bold;
+		  color: #000000;  
+      } 
+      .hoverable {
+	    cursor: pointer;
+      }
+    </style>
+    <script type="text/javascript">
+      function logout() {
+	  window.location.href = '/logout/';
+      }
+    </script>
+  <body>
+    {% block header %}
+    <div id="content_header">
+      <div class="navbar">
+	<div class="navbar-inner">
+	  <div class="container-fluid">
+            <a class="brand">EventSonar</a>
+	    <div class="nav-collapse">
+	      <ul class="nav pull-right">
+		<li>
+		  <a>Welcome, user name.</a>
+		</li>
+		<li>
+		  <a class="hoverable" onclick="logout()"><b>Log out</b></a>
+		</li>
+	      </ul>
+	    </div>
+	  </div>
+	</div>
+      </div>
+    </div>
+    {% endblock %}
+    <div class="container-fluid">
+      {% block content%}
+      <div class="row-fluid">
+	<div class="span4">
+	  {% block content_sidebar %}
+	  <!--Sidebar content-->
+	  <div id="content_sidebar">
+	    <div id="filter_date">
+	      <div>Date</div>
+	      <div>Today</div>
+	      <div>This week</div>
+	      <div>Next week</div>
+	    </div>
+	  </div>
+	  {% endblock %}
+	</div>	
+	<div class="span6">
+	  {% block content_body %}
+	  <!--Body content-->
+	  <div id="container_events">
+	  </div>
+	  
+	  <script type="text/template" id="event_template">
+	    <div id="content_body">
+	      <div class="event">
+		<div id="event_header_<%= event_id %>">
+		  <div id="event_name_<%= event_id %>">
+		    Sample Event
+		  </div>
+		</div>
+		<div id="event_detail_<%= event_id %>">
+		  <div id="event_place_<%= event_id %>">
+		    Places: Building 
+		  </div>
+		  <div id="event_address_<%= event_id %>">
+		    Address: 877 Heatherstone Way, Mountain View
+		  </div>
+		  <div id="event_date_<%= event_id %>">
+		    Date: June 21 2013 - June 22 2013
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </script>
+	  <script type="text/javascript">
+    	    var EVENT_API = '/api/v1/core/event/?format=json';
+    	    window.Event = Backbone.Model.extend({
+		url: function(){
+		    return this.get('resource_uri') || this.collection.url;
+		}
+	    });
+
+	    window.Events = Backbone.Collection.extend({
+		url: EVENT_API,
+		parse: function(data){
+		    return data.objects;
+		}                                             
+	    });
+
+    	    EventView = Backbone.View.extend({
+		initialize: function(){
+		    this.render();
+		},
+		render: function(){
+		    //Pass variables in using Underscore.js Template
+		    var variables = { event_id: "1" };
+		    // Compile the template using underscore
+		    var template = _.template( $("#event_template").html(), variables );
+		    // Load the compiled HTML into the Backbone "el"
+		    this.$el.html( template );
+		    return this;
+		}
+	    });
+
+	    window.App = Backbone.View.extend({
+		el: $('#container_events'),
+		initialize: function(){
+		    this.data = new Events();
+		    _.bindAll(this, 'addOne', 'addAll', 'render');
+		    this.data.bind('refresh', this.addAll);
+		    this.data.bind('add', this.addOne);
+		    this.data.bind('all', this.render);
+		    this.data.fetch();
+		},
+		addOne: function(event){
+		    var event_view = new EventView();
+		    $('#container_events').append(event_view.render().el);
+		},
+		addAll: function(){
+		    this.data.each(this.addOne);
+		}
+ 	    });
+
+	    window.app = new App();
+	  </script>
+	  {% endblock %}
+	</div>
+      </div>
+      {% endblock %}
+    </div>
+  </body>
+</html>

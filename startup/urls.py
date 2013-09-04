@@ -1,16 +1,16 @@
 from django.conf.urls import patterns, include, url
-from core.models import News
+from core.models import Event
 from tastypie.api import Api
-from core.resources import NewsResource
+from core.resources import EventResource
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
-admin.site.register(News)
+admin.site.register(Event)
 
 # Add tastypie resources.
 v1_api = Api(api_name='v1')
-v1_api.register(NewsResource())
+v1_api.register(EventResource())
 
 urlpatterns = patterns('',
     # Examples:
@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(v1_api.urls)),
+    url(r'^index/', 'core.views.index_view'),
 )
 
 

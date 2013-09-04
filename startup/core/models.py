@@ -1,11 +1,12 @@
 from django.db import models
 from django.db.models import CharField, TextField, DateField, TimeField, SmallIntegerField
 
-class News(models.Model):
+class Event(models.Model):
     name = CharField(max_length=100)
     description = TextField(blank=True, null=True)
     category = CharField(max_length=50)
-    date = DateField()
+    start_date = DateField()
+    end_date = DateField()
     start_time = TimeField()
     end_time = TimeField(blank=True, null=True)
     place = CharField(max_length=50)
