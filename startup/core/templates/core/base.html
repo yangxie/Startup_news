@@ -8,12 +8,25 @@
     <!-- Bootstrap -->
     <script type="text/javascript" src="{% static 'jquery-1.10.2.min.js' %}"></script>
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="{% static 'date.js' %}"></script>
     <script type="text/javascript" src="{% static 'underscore-min.js' %}"></script>
     <script type="text/javascript" src="{% static 'backbone-min.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <style type="text/css">
       .event {
-	  padding:3px;
+	  padding:10px;
+	  margin: 7px;
+	  background-color:#F5FFFA;
+	  
+	  -webkit-border-radius: 5px;
+	  -moz-border-radius: 5px;
+	  -ms-border-radius: 5px;
+	  -o-border-radius: 5px;
+	  border-radius: 5px;
+	  
+	  box-shadow: 3px 3px 10px 5px #000, 0 0 4px rgba(0, 0, 0, .5) inset;
+	  -webkit-box-shadow: 3px 3px 10px 5px #000, 0 0 4px rgba(0, 0, 0, .5) inset;
+	  -moz-box-shadow: 3px 3px 10px 5px #000, 0 0 4px rgba(0, 0, 0, .5) inset;
       }
       .navbar {
 	    opacity:0.8;
@@ -61,7 +74,7 @@
       </div>
     </div>
     {% endblock %}
-    <div class="container-fluid">
+    <div class="container-fluid" id="container_body">
       {% block content%}
       <div class="row-fluid">
 	<div class="span4">
@@ -70,43 +83,61 @@
 	  <div id="content_sidebar">
 	    <div id="filter_date">
 	      <div>Date</div>
-	      <div>Today</div>
-	      <div>This week</div>
-	      <div>Next week</div>
+	      <div><a class="filter_by_today" href="#">Today</a></div>
+	      <div><a class="filter_by_this_week" href="#">This week</a></div>
+	      <div><a class="filter_by_next_week" href="#">Next week</a></div>
 	    </div>
 	  </div>
 	  {% endblock %}
 	</div>	
 	<div class="span6">
-	  {% block content_body %}
-	  <!--Body content-->
 	  <div id="container_events">
 	  </div>
+	  {% block content_body %}
+	  <!--Body content-->
+	  <script type="text/template" id="pagination_template">
+	    <% if (pages >= 1) { %>
+	    <% if (prev) { %>
+	    <a href="#" class="prev">previous</a>
+	    <% } else { %>
+	    <span>previous</span>
+	    <% } %>
+	    
+	    <%= range[0] %>..<%= range[1] %> of <%= total %>
+	    
+	    <% if(next) { %>
+	    <a href="#" class="next">next</a>
+	    <% } else { %>
+	    <span>next</span>
+	    <% } %>
+	    <% } %>
+	  </script>
 	  
 	  <script type="text/template" id="event_template">
 	    <div id="content_body">
 	      <div class="event">
-		<div id="event_header_<%= event_id %>">
-		  <div id="event_name_<%= event_id %>">
-		    Sample Event
+		<div id="event_header_<%= id %>">
+		  <div id="event_name_<%= id %>">
+		    <%= name %>
 		  </div>
 		</div>
-		<div id="event_detail_<%= event_id %>">
-		  <div id="event_place_<%= event_id %>">
-		    Places: Building 
+		<div id="event_detail_<%= id %>">
+		  <div id="event_place_<%= id %>">
+		    Places: <%= place %>
 		  </div>
-		  <div id="event_address_<%= event_id %>">
-		    Address: 877 Heatherstone Way, Mountain View
+		  <div id="event_address_<%= id %>">
+		    Address: <%= address_line1 %>
 		  </div>
-		  <div id="event_date_<%= event_id %>">
-		    Date: June 21 2013 - June 22 2013
+		  <div id="event_date_<%= id %>">
+		    Date: <%= start_date %>
 		  </div>
 		</div>
 	      </div>
 	    </div>
 	  </script>
+
 	  <script type="text/javascript">
-    	    var EVENT_API = '/api/v1/core/event/?format=json';
+    	    var EVENT_API = '/api/v1/core/event/';
     	    window.Event = Backbone.Model.extend({
 		url: function(){
 		    return this.get('resource_uri') || this.collection.url;
@@ -114,21 +145,109 @@
 	    });
 
 	    window.Events = Backbone.Collection.extend({
-		url: EVENT_API,
-		parse: function(data){
-		    return data.objects;
-		}                                             
+		baseUrl: EVENT_API,
+		initialize: function() {
+		    _.bindAll(this, 'parse', 'url', 'nextPage', 'previousPage', 'sort_by', 'hasNextPage', 'hasPreviousPage', 'updatePageInfo');
+		    typeof(options) != 'undefined' || (options = {});
+		    typeof(this.limit) != 'undefined' || (this.limit = 2);
+		    typeof(this.offset) != 'undefined' || (this.offset = 0);
+		    typeof(this.filter_options) != 'undefined' || (this.filter_options = {});
+		    typeof(this.sort_field) != 'undefined' || (this.sort_field = '')
+		},
+		url: function() {
+		    urlparams = {offset: this.offset, limit: this.limit, format: 'json'};
+		    urlparams = $.extend(urlparams, this.filter_options);
+		    if (this.sort_field) {
+			urlparams = $.extend(urlparams, {sort_by: this.sort_field});
+		    }
+		    console.log(this.baseUrl + '?' + $.param(urlparams));
+		    return this.baseUrl + '?' + $.param(urlparams);
+		},
+		hasNextPage: function() {
+		    return this.offset + this.limit < this.total;
+		},
+		hasPreviousPage: function() {
+		    return this.offset - this.limit >= 0;
+		},
+		updatePageInfo: function() {
+		    this.range = [this.offset + 1, Math.min(this.offset + this.limit, this.total)];
+		    this.prev = this.hasPreviousPage();
+		    this.next = this.hasNextPage();
+		},
+		nextPage: function() {
+		    if (!this.hasNextPage()) {
+			return false;
+		    }
+		    this.offset = this.offset + this.limit;
+		    this.updatePageInfo();
+		    return this.fetch();
+		},
+		previousPage: function() {
+		    if (!this.hasPreviousPage()) {
+			return false;
+		    }
+		    this.offset = this.offset - this.limit;
+		    this.updatePageInfo();
+		    return this.fetch();
+		},
+		filterByToday: function() {
+		    this.offest = 0;
+		    var today = new Date();
+		    today = today.getFullYear() + "-" + (today.getMonth()  + 1)+ "-" + today.getDate();
+		    this.filter_options = {};
+		    this.filter_options['start_date'] = today;
+		    this.updatePageInfo();
+		    return this.fetch();
+		},
+		filterByThisWeek: function() {
+		    this.offest = 0;
+		    if (Date.today().is().sunday()) {
+			var weekBegin = Date.today();
+			var weekEnd = Date.today().next().sunday();
+		    } else {
+			var weekBegin = Date.today.previous.sunday();
+			var weekEnd = Date.today().next().sunday();
+		    }
+		    this.filter_options = {};
+		    this.filter_options['start_date__gte'] = weekBegin.toString("yyyy-MM-dd");
+		    this.filter_options['start_date__lte'] = weekEnd.toString("yyyy-MM-dd");
+		    this.updatePageInfo();
+		    return this.fetch();
+		},
+		filterByNextWeek: function() {
+		    this.offest = 0;
+		    var weekBegin = Date.today().next().sunday();
+		    var weekEnd = Date.today().next().sunday().next().sunday();
+		    this.filter_options = {};
+		    this.filter_options['start_date__gte'] = weekBegin.toString("yyyy-MM-dd");
+		    this.filter_options['start_date__lte'] = weekEnd.toString("yyyy-MM-dd");
+		    this.updatePageInfo();
+		    return this.fetch();
+		},
+		parse: function(response){
+//		    this.offset = response.meta.offset;
+//		    this.limit = response.meta.limit;
+		    this.total = response.meta.total_count;
+		    this.pages = Math.ceil(this.total / this.limit);
+		    this.updatePageInfo();
+		    return response.objects;
+		},
+		sort_by: function (field) {
+		    this.sort_field = field;
+		    this.offset = 0;
+		    return this.fetch();
+		}
 	    });
+	    
 
     	    EventView = Backbone.View.extend({
-		initialize: function(){
+		initialize: function(model){
+		    this.model = model;
 		    this.render();
 		},
 		render: function(){
-		    //Pass variables in using Underscore.js Template
-		    var variables = { event_id: "1" };
 		    // Compile the template using underscore
-		    var template = _.template( $("#event_template").html(), variables );
+		    var template = _.template( $("#event_template").html(), this.model);
 		    // Load the compiled HTML into the Backbone "el"
 		    this.$el.html( template );
 		    return this;
@@ -136,21 +255,62 @@
 	    });
 
 	    window.App = Backbone.View.extend({
-		el: $('#container_events'),
+		el: $('#container_body'),
+		events : {
+		    'click a.prev': 'previous',
+		    'click a.next': 'next',
+		    'click a.filter_by_today': 'filterByToday',
+		    'click a.filter_by_this_week': 'filterByThisWeek',
+		    'click a.filter_by_next_week': 'filterByNextWeek',
+		},
 		initialize: function(){
-		    this.data = new Events();
-		    _.bindAll(this, 'addOne', 'addAll', 'render');
-		    this.data.bind('refresh', this.addAll);
-		    this.data.bind('add', this.addOne);
-		    this.data.bind('all', this.render);
-		    this.data.fetch();
+		    var container = document.createDocumentFragment();
+		    _.bindAll(this, 'previous', 'next', 'render', 'refresh', 'filterByToday', 'filterByThisWeek', 'filterByNextWeek');
+		    var eventList = new Events();
+		    this.collection = eventList;
+		    eventList.bind('fetch', this.render);
+		    $.when(eventList.fetch()).done(function(model) {
+			_.each(model.objects, function(object) {
+			    var event_view = new EventView(object);
+			    $(container).append(event_view.render().el);
+			});
+			$('#container_events').append(container);
+			console.log(eventList);
+			var pagination_template = _.template( $("#pagination_template").html(), eventList);
+			$('#container_events').append( pagination_template );
+		    });
 		},
-		addOne: function(event){
-		    var event_view = new EventView();
-		    $('#container_events').append(event_view.render().el);
+		previous: function() {
+		    this.refresh(this.collection.previousPage());
 		},
-		addAll: function(){
-		    this.data.each(this.addOne);
+		next: function() {
+		    this.refresh(this.collection.nextPage());
+		},
+		filterByToday: function() {
+		    this.refresh(this.collection.filterByToday());
+		},
+		filterByThisWeek: function() {
+		    this.refresh(this.collection.filterByThisWeek());
+		},
+		filterByNextWeek: function() {
+		    this.refresh(this.collection.filterByNextWeek());
+		},
+		refresh: function(fetchFn) {
+		    var collection = this.collection;
+		    var container = document.createDocumentFragment();
+		    $.when(fetchFn).done(function(model) {
+			_.each(model.objects, function(object) {
+			    var event_view = new EventView(object);
+			    $(container).append(event_view.render().el);
+			});
+			$('#container_events').html('');
+			$('#container_events').append(container);
+			var pagination_template = _.template( $("#pagination_template").html(), collection);
+			$('#container_events').append( pagination_template );
+		    });
+		},
+		render: function() {
+		    alert('');
 		}
  	    });
 

@@ -1,5 +1,6 @@
 from tastypie import fields
 from tastypie.authorization import DjangoAuthorization
+from tastypie.paginator import Paginator
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from core.models import Event
 
@@ -13,5 +14,6 @@ class EventResource(ModelResource):
         authorization = DjangoAuthorization()
         filtering = {
             'category': ALL,
-            'date': ['exact', 'range', 'gt', 'gte', 'lt', 'lte'],
+            'start_date': ['exact', 'range', 'gt', 'gte', 'lt', 'lte'],
         }
+        paginator_class = Paginator
