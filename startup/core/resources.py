@@ -13,7 +13,8 @@ class EventResource(ModelResource):
         resource_name = 'core/event'
         authorization = DjangoAuthorization()
         filtering = {
-            'category': ALL,
+            'category': ['exact'],
             'start_date': ['exact', 'range', 'gt', 'gte', 'lt', 'lte'],
+            'city' : ['exact']
         }
         paginator_class = Paginator

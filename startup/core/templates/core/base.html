@@ -46,6 +46,9 @@
       .hoverable {
 	    cursor: pointer;
       }
+      #container_body {
+	  padding-left: 50px;
+      }
     </style>
     <script type="text/javascript">
       function logout() {
@@ -87,6 +90,12 @@
 	      <div><a class="filter_by_this_week" href="#">This week</a></div>
 	      <div><a class="filter_by_next_week" href="#">Next week</a></div>
 	    </div>
+	    <div id="filter_category">
+	      <div>Category</div>
+	    </div>
+	    <div id="filter_location">
+	      <div>Location</div>
+	    </div>
 	  </div>
 	  {% endblock %}
 	</div>	
@@ -122,20 +131,24 @@
 		  </div>
 		</div>
 		<div id="event_detail_<%= id %>">
-		  <div id="event_place_<%= id %>">
-		    Places: <%= place %>
-		  </div>
 		  <div id="event_address_<%= id %>">
-		    Address: <%= address_line1 %>
+		    Address: <%= address_line1 %>, <%= place %>
 		  </div>
 		  <div id="event_date_<%= id %>">
-		    Date: <%= start_date %>
+		    <% if (start_date != end_date) { %>
+		    Date: <%= start_date %> at <%= start_time %>
+		    to <%= end_date %> at <%= end_time %>
+		    <% } else {%>
+		    Date: <%= start_date %> at <%= start_time %> to <%= end_time %>
+		    <% } %>
+		  </div>
+		  <div id="event_category_<%= id %>">
+		    Category: <%= category %>
 		  </div>
 		</div>
 	      </div>
 	    </div>
 	  </script>
-
 	  <script type="text/javascript">
     	    var EVENT_API = '/api/v1/core/event/';
     	    window.Event = Backbone.Model.extend({
@@ -221,6 +234,20 @@
 		    this.filter_options = {};
 		    this.filter_options['start_date__gte'] = weekBegin.toString("yyyy-MM-dd");
 		    this.filter_options['start_date__lte'] = weekEnd.toString("yyyy-MM-dd");
+		    this.updatePageInfo();
+		    return this.fetch();
+		},
+		filterByLocation: function(location) {
+		    this.offset = 0;
+		    this.filter_options = {};
+		    this.filter_options['city'] = location;
+		    this.updatePageInfo();
+		    return this.fetch();
+		},
+		filterByCategory: function(category) {
+		    this.offset = 0;
+		    this.filter_options = {};
+		    this.filter_options['category'] = category;
 		    this.updatePageInfo();
 		    return this.fetch();
 		},
@@ -315,6 +342,32 @@
  	    });
 
 	    window.app = new App();
+	  </script>
+	  <script type="text/javascript">
+    	    function filter_by_location(location) {
+		window.app.refresh(window.app.collection.filterByLocation(location));
+	    }
+	    function filter_by_category(category) {
+		window.app.refresh(window.app.collection.filterByCategory(category));
+	    }
+    	    $.ajax({
+		url: "/all_filter_options/",
+	    }).done(function ( data ) {
+		if( console && console.log ) {
+		    console.log(data);
+		    for (var i = 0; i < data['locations'].length; ++i)  {
+			var location = data['locations'][i];
+			var link = $('<a>', {href : '#', onclick: 'filter_by_location("' + location + '");', name : location, class : "filter_by_location"}).html(location);
+			$('#filter_location').append($('<div>').append(link));
+		    }
+
+		    for (var i = 0; i < data['categories'].length; ++i)  {
+			var category = data['categories'][i];
+			var link = $('<a>', {href : '#', onclick: 'filter_by_category("' + category + '");', name : category, class : "filter_by_category"}).html(category);
+			$('#filter_category').append($('<div>').append(link));
+		    }
+		}
+	    });
 	  </script>
 	  {% endblock %}
 	</div>
