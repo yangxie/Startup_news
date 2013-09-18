@@ -24,6 +24,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(v1_api.urls)),
     url(r'^index/', 'core.views.index_view'),
+    url(r'^all_filter_options/', 'core.views.all_filter_options_view')
 )
-
-
