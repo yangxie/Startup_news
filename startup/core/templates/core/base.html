@@ -13,42 +13,60 @@
     <script type="text/javascript" src="{% static 'backbone-min.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <style type="text/css">
+      body {
+	  font-family:"open sans";
+      }
       .event {
-	  padding:10px;
+	  padding:10px 90px;
 	  margin: 7px;
-	  background-color:#F5FFFA;
+//	  background-color:#F5FFFA;
 	  
-	  -webkit-border-radius: 5px;
-	  -moz-border-radius: 5px;
-	  -ms-border-radius: 5px;
-	  -o-border-radius: 5px;
-	  border-radius: 5px;
-	  
-	  box-shadow: 3px 3px 10px 5px #000, 0 0 4px rgba(0, 0, 0, .5) inset;
-	  -webkit-box-shadow: 3px 3px 10px 5px #000, 0 0 4px rgba(0, 0, 0, .5) inset;
-	  -moz-box-shadow: 3px 3px 10px 5px #000, 0 0 4px rgba(0, 0, 0, .5) inset;
+//	  -webkit-border-radius: 5px;
+//	  -moz-border-radius: 5px;
+//	  -ms-border-radius: 5px;
+//	  -o-border-radius: 5px;
+//	  border-radius: 5px;
+
+	  border-bottom:1px solid #313030;	  
+
+//	  box-shadow: 3px 3px 10px 5px #000, 0 0 4px rgba(0, 0, 0, .5) inset;
+//	  -webkit-box-shadow: 3px 3px 10px 5px #000, 0 0 4px rgba(0, 0, 0, .5) inset;
+//	  -moz-box-shadow: 3px 3px 10px 5px #000, 0 0 4px rgba(0, 0, 0, .5) inset;
+      }
+      .event .media_title {
+	  font-size: 20px;
+	  font-weight: bold;
+	  color: #000000;  
       }
       .navbar {
-	    opacity:0.8;
+	  padding: 0 10%;
+	  opacity:0.8;
       }
       .navbar .navbar-inner {
 	    -moz-box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
-	      -webkit-box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
-	        -o-box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
-		  box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
+	    -webkit-box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
+	    -o-box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
+	    box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
       }
       .nav-text {     
-	    font-family:"open sans";
-	      font-size: 16px;
-	        font-weight: bold;
-		  color: #000000;  
+	  font-family:"open sans";
+	  font-size: 16px;
+	  font-weight: bold;
+	  color: #000000;  
       } 
       .hoverable {
 	    cursor: pointer;
       }
       #container_body {
-	  padding-left: 50px;
+	  padding-left: 10%;
+	  padding-right: 10%;
       }
+      #content_sidebar {
+	  border-right:1px solid #313030;
+	  height: 800px;
+	  margin: 20px;
+      }
+
     </style>
     <script type="text/javascript">
       function logout() {
@@ -80,7 +98,7 @@
     <div class="container-fluid" id="container_body">
       {% block content%}
       <div class="row-fluid">
-	<div class="span4">
+	<div class="span3">
 	  {% block content_sidebar %}
 	  <!--Sidebar content-->
 	  <div id="content_sidebar">
@@ -126,14 +144,11 @@
 	    <div id="content_body">
 	      <div class="event">
 		<div id="event_header_<%= id %>">
-		  <div id="event_name_<%= id %>">
+		  <div id="event_name_<%= id %>" class="media_title">
 		    <%= name %>
 		  </div>
 		</div>
 		<div id="event_detail_<%= id %>">
-		  <div id="event_address_<%= id %>">
-		    Address: <%= address_line1 %>, <%= place %>
-		  </div>
 		  <div id="event_date_<%= id %>">
 		    <% if (start_date != end_date) { %>
 		    Date: <%= start_date %> at <%= start_time %>
@@ -141,6 +156,9 @@
 		    <% } else {%>
 		    Date: <%= start_date %> at <%= start_time %> to <%= end_time %>
 		    <% } %>
+		  </div>
+		  <div id="event_address_<%= id %>">
+		    Address: <%= address_line1 %>, <%= place %>
 		  </div>
 		  <div id="event_category_<%= id %>">
 		    Category: <%= category %>
@@ -162,7 +180,7 @@
 		initialize: function() {
 		    _.bindAll(this, 'parse', 'url', 'nextPage', 'previousPage', 'sort_by', 'hasNextPage', 'hasPreviousPage', 'updatePageInfo');
 		    typeof(options) != 'undefined' || (options = {});
-		    typeof(this.limit) != 'undefined' || (this.limit = 2);
+		    typeof(this.limit) != 'undefined' || (this.limit = 10);
 		    typeof(this.offset) != 'undefined' || (this.offset = 0);
 		    typeof(this.filter_options) != 'undefined' || (this.filter_options = {});
 		    typeof(this.sort_field) != 'undefined' || (this.sort_field = '')
