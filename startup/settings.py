@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'core',
+    'auth',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -170,3 +171,7 @@ LOGGING = {
 }
 
 DEFAULT_CHARSET = 'utf-8'
+
+SOUTH_MIGRATION_MODULES = {
+    'auth': 'auth.migrations',
+}

@@ -17,7 +17,7 @@ class UserProfile(models.Model):
     bio = models.CharField(max_length=255, blank=True)
     profile_photo_url = models.CharField(max_length=2083, blank=True)
 
-    state = models.CharField(max_length=2, blank=True, default='NA')
+    state = models.CharField(max_length=35, blank=True, default='NA')
     city = models.CharField(max_length=35, blank=True)
     address = models.CharField(max_length=100, blank=True)
     zip = models.CharField(max_length=10, blank=True)
