@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',     
-    "text!core/event_template.js"
+    "text!app/core/event_template.js"
 ], function($, _, Backbone, eventTemplate) {
     var EVENT_API = '/api/v1/core/event/';
     window.Event = Backbone.Model.extend({
