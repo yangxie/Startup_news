@@ -148,17 +148,7 @@ define([
 	    _.bindAll(this, 'previous', 'next', 'render', 'refresh', 'filterByToday', 'filterByThisWeek', 'filterByNextWeek');
 	    var eventList = new Events();
 	    this.collection = eventList;
-	    eventList.bind('fetch', this.render);
-	    $.when(eventList.fetch()).done(function(model) {
-		_.each(model.objects, function(object) {
-		    var event_view = new EventView(object);
-		    $(container).append(event_view.render().el);
-		});
-		$('#container_events').append(container);
-		console.log(eventList);
-		var pagination_template = _.template( $("#pagination_template").html(), eventList);
-		$('#container_events').append( pagination_template );
-	    });
+	    this.refresh(this.collection.fetch());
 	},
 	previous: function() {
 	    this.refresh(this.collection.previousPage());
@@ -185,7 +175,8 @@ define([
 		});
 		$('#container_events').html('');
 		$('#container_events').append(container);
-		var pagination_template = _.template( $("#pagination_template").html(), collection);
+		var pagination_template =
+		    _.template( $("#pagination_template").html(), collection);
 		$('#container_events').append( pagination_template );
 	    });
 	},
