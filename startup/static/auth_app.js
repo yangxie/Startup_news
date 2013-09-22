@@ -10,13 +10,10 @@ require.config({
 
 require([
   // Load our app module and pass it to our definition function
-    'app/core/event_view',
     'app/auth/auth_view',
-], function(EventView, AuthView){
+], function(App){
   // The "app" dependency is passed in as "App"
   // Again, the other dependencies passed in are not "AMD" therefore don't pass a parameter to this function
-    EventView.initialize();
-    console.log(EventView);
-    AuthView.initialize();
-    console.log(AuthView);
+    alert('');
+    App.initialize();
 });

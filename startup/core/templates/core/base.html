@@ -69,11 +69,6 @@
       }
 
     </style>
-    <script type="text/javascript">
-      function logout() {
-	  window.location.href = '/logout/';
-      }
-    </script>
   <body>
     {% block header %}
     <div id="content_header">
@@ -81,15 +76,7 @@
 	<div class="navbar-inner">
 	  <div class="container-fluid">
             <a class="brand">EventSonar</a>
-	    <div class="nav-collapse">
-	      <ul class="nav pull-right">
-		<li>
-		  <a>Welcome, user name.</a>
-		</li>
-		<li>
-		  <a class="hoverable" onclick="logout()"><b>Log out</b></a>
-		</li>
-	      </ul>
+	    <div id="auth-div" class="nav-collapse pull-right">
 	    </div>
 	  </div>
 	</div>

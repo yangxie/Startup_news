@@ -8,6 +8,7 @@ from core.models import Event
 from django.contrib import auth
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
+from django.views.decorators.csrf import ensure_csrf_cookie
 import json
 
 class JsonResponse(HttpResponse):
@@ -17,6 +18,7 @@ class JsonResponse(HttpResponse):
         super(JsonResponse, self).__init__(json.dumps(content), mimetype=mimetype,
                                            status=status, content_type=content_type)
 
+@ensure_csrf_cookie
 def index_view(request):
     return render(request, 'core/base.html')
 

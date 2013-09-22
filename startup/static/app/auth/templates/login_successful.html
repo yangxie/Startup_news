@@ -1,0 +1,11 @@
+<form id="logout-form" class="navbar-form Form AuthForm SignupForm" method="POST" accept-charset="utf-8" action="/logout/">
+  <ul class="nav">
+    <li>
+      <a>Welcome, <%= username %>.</a>
+    </li>
+    <li>
+      <a id="logout-link" class="hoverable">Log out</a>
+    </li>
+    <input type="hidden" name="csrfmiddlewaretoken" value="<%= csrftoken %>"/>
+  </ul>
+</form>

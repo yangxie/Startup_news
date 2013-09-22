@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 try:
     from django.contrib.auth import get_user_model
@@ -22,6 +23,15 @@ try:
 except ImportError:
     datetime_now = datetime.datetime.now
 
+from django.http import HttpResponse
+import json
+class JsonResponse(HttpResponse):
+    def __init__(self, content={}, mimetype=None, status=None, content_type=None):
+        if not content_type:
+            content_type = 'application/json'
+        super(JsonResponse, self).__init__(json.dumps(content), mimetype=mimetype,
+                                           status=status, content_type=content_type)
+
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
 def validateEmail(email):
@@ -31,6 +41,7 @@ def validateEmail(email):
     except ValidationError:
         return False
 
+@ensure_csrf_cookie
 def signup(request):
     if request.user.is_authenticated():
         return render_to_response('auth/default.html', {'text': 'Logged in already'}, context_instance=RequestContext(request))
@@ -127,6 +138,7 @@ def signup_confirm(request):
             except User.DoesNotExist:
                 return render_to_response('auth/default.html', {'text': 'Email not exists'}, context_instance=RequestContext(request))
 
+@ensure_csrf_cookie
 def login_view(request):
     if request.user.is_authenticated():
         return render_to_response('auth/default.html', {'text': 'Logged in already'}, context_instance=RequestContext(request))
@@ -153,7 +165,8 @@ def login_view(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return render_to_response('auth/default.html', {'text': 'Logged in!'}, context_instance=RequestContext(request))
+                    resp_data = {'msg': 'Logged in.'}
+                    return JsonResponse(resp_data)
                 else:
                     request.session.set_test_cookie()
                     return render_to_response('auth/default.html', {'text': 'The account is inactive'}, context_instance=RequestContext(request))

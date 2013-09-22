@@ -220,7 +220,6 @@ define([
     });
 
     var initialize = function(){
-	// Pass in our Router module and call it's initialize function
 	window.app = new window.EventApp();
     };
 
