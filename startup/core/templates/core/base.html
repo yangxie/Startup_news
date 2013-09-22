@@ -110,23 +110,6 @@
 	  </div>
 	  {% block content_body %}
 	  <!--Body content-->
-	  <script type="text/template" id="pagination_template">
-	    <% if (pages >= 1) { %>
-	    <% if (prev) { %>
-	    <a href="#" class="prev">previous</a>
-	    <% } else { %>
-	    <span>previous</span>
-	    <% } %>
-	    
-	    <%= range[0] %>..<%= range[1] %> of <%= total %>
-	    
-	    <% if(next) { %>
-	    <a href="#" class="next">next</a>
-	    <% } else { %>
-	    <span>next</span>
-	    <% } %>
-	    <% } %>
-	  </script>
 	  {% endblock %}
 	</div>
       </div>

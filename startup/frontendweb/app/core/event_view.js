@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',     
-    "text!app/core/event_template.js"
-], function($, _, Backbone, eventTemplate) {
+    "text!app/core/event_template.js",
+    "text!app/core/paginator.html"
+], function($, _, Backbone, eventTemplate, paginatorTemplate) {
     var EVENT_API = '/api/v1/core/event/';
     window.Event = Backbone.Model.extend({
 	url: function(){
@@ -175,9 +176,8 @@ define([
 		});
 		$('#container_events').html('');
 		$('#container_events').append(container);
-		var pagination_template =
-		    _.template( $("#pagination_template").html(), collection);
-		$('#container_events').append( pagination_template );
+		var template =  _.template(paginatorTemplate, collection);
+		$('#container_events').append(template);
 	    });
 	},
 	render: function() {
@@ -188,9 +188,11 @@ define([
     window.filter_by_location = function(location) {
 	window.app.refresh(window.app.collection.filterByLocation(location));
     }
+
     window.filter_by_category = function(category) {
 	window.app.refresh(window.app.collection.filterByCategory(category));
     }
+
     $.ajax({
 	url: "/all_filter_options/",
     }).done(function ( data ) {
@@ -198,13 +200,23 @@ define([
 	    console.log(data);
 	    for (var i = 0; i < data['locations'].length; ++i)  {
 		var location = data['locations'][i];
-		var link = $('<a>', {href : '#', onclick: 'window.filter_by_location("' + location + '");', name : location, class : "filter_by_location"}).html(location);
+		var link = $('<a>', 
+			     {href : '#',
+			      onclick:
+			      'window.filter_by_location("' + location + '");',
+			      name : location,
+			      class : "filter_by_location"}).html(location);
 		$('#filter_location').append($('<div>').append(link));
 	    }
 
 	    for (var i = 0; i < data['categories'].length; ++i)  {
 		var category = data['categories'][i];
-		var link = $('<a>', {href : '#', onclick: 'window.filter_by_category("' + category + '");', name : category, class : "filter_by_category"}).html(category);
+		var link = $('<a>', 
+			     {href : '#',
+			      onclick:
+			      'window.filter_by_category("' + category + '");',
+			      name : category,
+			      class : "filter_by_category"}).html(category);
 		$('#filter_category').append($('<div>').append(link));
 	    }
 	}
