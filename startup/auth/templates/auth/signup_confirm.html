@@ -1,0 +1,37 @@
+<form class="Form AuthForm SignupForm" action="/signup/confirm/" method="POST" accept-charset="utf-8">
+    {% csrf_token %}
+    <ul>
+        <li>
+            <input id="id_email" name="email" type="text" placeholder="Email Address" value="{{ email|safe }}" disabled>
+        </li>
+
+        <li>
+            <input id="id_first_name" name="first_name" type="text" placeholder="First Name" value="{{ first_name|safe }}">
+        </li>
+
+        <li>
+            <input id="id_last_name" name="last_name" type="text" placeholder="Last Name" value="{{ last_name|safe }}">
+        </li>
+
+        <li>
+            <input id="id_code" name="code" type="hidden" placeholder="code" value="{{ code|safe }}">
+        </li>
+
+        <li>
+            <input id="id_password" name="password" type="password" placeholder="Password" value="">
+        </li>
+
+        <li>
+            <input id="id_password_confirm" name="password_confirm" type="password" placeholder="Confirm Password" value="">
+        </li>
+
+        <li>
+            <input id="id_email" name="email" type="hidden" placeholder="Email Address" value="{{ email|safe }}">
+        </li>
+
+        <li>
+            <input type="submit" value="Sign up">
+        </li>
+
+    </ul>
+</form>

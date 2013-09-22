@@ -33,28 +33,28 @@ def validateEmail(email):
 
 def signup(request):
     if request.user.is_authenticated():
-        return render_to_response('default.html', {'text': 'Logged in already'}, context_instance=RequestContext(request))
+        return render_to_response('auth/default.html', {'text': 'Logged in already'}, context_instance=RequestContext(request))
     else:
         if request.method == 'GET':
             request.session.set_test_cookie()
-            return render_to_response('signup_email.html', '', context_instance=RequestContext(request))
+            return render_to_response('auth/signup_email.html', '', context_instance=RequestContext(request))
         else:
             if not request.session.test_cookie_worked():
-                return render_to_response('default.html', {'text': 'Please enable cookies'}, context_instance=RequestContext(request))
+                return render_to_response('auth/default.html', {'text': 'Please enable cookies'}, context_instance=RequestContext(request))
             else:
                 request.session.delete_test_cookie()
 
             email_input = request.POST['email'].strip(' \t\n\r').lower()
             if email_input == '':
-                return render_to_response('default.html', {'text': 'Please enter email'}, context_instance=RequestContext(request))
+                return render_to_response('auth/default.html', {'text': 'Please enter email'}, context_instance=RequestContext(request))
             else:
                 if not validateEmail(email_input):
-                    return render_to_response('default.html', {'text': 'Please enter valid email'}, context_instance=RequestContext(request))
+                    return render_to_response('auth/default.html', {'text': 'Please enter valid email'}, context_instance=RequestContext(request))
 
 
                 user = User.objects.filter(email__iexact=email_input)
                 if user.exists():
-                    return render_to_response('default.html', {'text': 'Email exists'}, context_instance=RequestContext(request))
+                    return render_to_response('auth/default.html', {'text': 'Email exists'}, context_instance=RequestContext(request))
                 else:
                     username_temp = 'tltemp_'+email_input
                     username_temp = username_temp[:30]
@@ -68,15 +68,15 @@ def signup(request):
                         user.save()
                         userprofile=UserProfile.objects.create(user=user, status='I', code=activation_key)
                         userprofile.save()
-                        return render_to_response('default.html', {'text': 'Go to /signup?email='+email_input+'&code='+activation_key}, context_instance=RequestContext(request))
+                        return render_to_response('auth/default.html', {'text': 'Go to /signup?email='+email_input+'&code='+activation_key}, context_instance=RequestContext(request))
                     except Exception as e:
                         print e
                         request.session.set_test_cookie()
-                        return render_to_response('default.html', {'text': 'Sign up failed'}, context_instance=RequestContext(request))
+                        return render_to_response('auth/default.html', {'text': 'Sign up failed'}, context_instance=RequestContext(request))
 
 def signup_confirm(request):
     if request.user.is_authenticated():
-        return render_to_response('default.html', {'text': 'Logged in already'}, context_instance=RequestContext(request))
+        return render_to_response('auth/default.html', {'text': 'Logged in already'}, context_instance=RequestContext(request))
     else:
         if request.method == 'GET':
             request.session.set_test_cookie()
@@ -87,20 +87,20 @@ def signup_confirm(request):
                 print code
             except Exception as e:
                 print e
-                return render_to_response('default.html', {'text': 'Link is invalid'}, context_instance=RequestContext(request))
+                return render_to_response('auth/default.html', {'text': 'Link is invalid'}, context_instance=RequestContext(request))
 
             try:
                 user = User.objects.get(email__iexact=email)
                 print user.userprofile.code
                 if user.userprofile.code.lower() == code:
-                    return render_to_response('signup_confirm.html', {'email': email, 'code': code}, context_instance=RequestContext(request))
+                    return render_to_response('auth/signup_confirm.html', {'email': email, 'code': code}, context_instance=RequestContext(request))
                 else:
-                    return render_to_response('default.html', {'text': 'Code doesnt match'}, context_instance=RequestContext(request))
+                    return render_to_response('auth/default.html', {'text': 'Code doesnt match'}, context_instance=RequestContext(request))
             except User.DoesNotExist:
-                return render_to_response('default.html', {'text': 'Email not exists'}, context_instance=RequestContext(request))
+                return render_to_response('auth/default.html', {'text': 'Email not exists'}, context_instance=RequestContext(request))
         else:
             if not request.session.test_cookie_worked():
-                return render_to_response('default.html', {'text': 'Please enable cookies'}, context_instance=RequestContext(request))
+                return render_to_response('auth/default.html', {'text': 'Please enable cookies'}, context_instance=RequestContext(request))
             else:
                 request.session.delete_test_cookie()
 
@@ -121,22 +121,22 @@ def signup_confirm(request):
                     user.userprofile.status = 'A'
                     user.userprofile.save()
                     user.save()
-                    return render_to_response('default.html', {'text': 'Signed up successfully!'}, context_instance=RequestContext(request))
+                    return render_to_response('auth/default.html', {'text': 'Signed up successfully!'}, context_instance=RequestContext(request))
                 else:
-                    return render_to_response('default.html', {'text': 'Code doesnt match'}, context_instance=RequestContext(request))
+                    return render_to_response('auth/default.html', {'text': 'Code doesnt match'}, context_instance=RequestContext(request))
             except User.DoesNotExist:
-                return render_to_response('default.html', {'text': 'Email not exists'}, context_instance=RequestContext(request))
+                return render_to_response('auth/default.html', {'text': 'Email not exists'}, context_instance=RequestContext(request))
 
 def login_view(request):
     if request.user.is_authenticated():
-        return render_to_response('default.html', {'text': 'Logged in already'}, context_instance=RequestContext(request))
+        return render_to_response('auth/default.html', {'text': 'Logged in already'}, context_instance=RequestContext(request))
     else:
         if request.method == 'GET':
             request.session.set_test_cookie()
-            return render_to_response('login.html', '', context_instance=RequestContext(request))
+            return render_to_response('auth/login.html', '', context_instance=RequestContext(request))
         else:
             if not request.session.test_cookie_worked():
-                return render_to_response('default.html', {'text': 'Please enable cookies'}, context_instance=RequestContext(request))
+                return render_to_response('auth/default.html', {'text': 'Please enable cookies'}, context_instance=RequestContext(request))
             else:
                 request.session.delete_test_cookie()
 
@@ -147,19 +147,19 @@ def login_view(request):
                 username = user.username
                 print username
             except User.DoesNotExist:
-                return render_to_response('default.html', {'text': 'No such email'}, context_instance=RequestContext(request))
+                return render_to_response('auth/default.html', {'text': 'No such email'}, context_instance=RequestContext(request))
             print password
             user = authenticate(username=username, password=password)
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return render_to_response('default.html', {'text': 'Logged in!'}, context_instance=RequestContext(request))
+                    return render_to_response('auth/default.html', {'text': 'Logged in!'}, context_instance=RequestContext(request))
                 else:
                     request.session.set_test_cookie()
-                    return render_to_response('default.html', {'text': 'The account is inactive'}, context_instance=RequestContext(request))
+                    return render_to_response('auth/default.html', {'text': 'The account is inactive'}, context_instance=RequestContext(request))
             else:
                 request.session.set_test_cookie()
-                return render_to_response('default.html', {'text': 'Email and password dont match'}, context_instance=RequestContext(request))
+                return render_to_response('auth/default.html', {'text': 'Email and password dont match'}, context_instance=RequestContext(request))
 
 def logout_view(request):
     logout(request)
