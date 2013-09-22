@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',     
     "text!app/core/event_template.js",
-    "text!app/core/paginator.html"
-], function($, _, Backbone, eventTemplate, paginatorTemplate) {
+    "text!app/core/paginator.html",
+    "text!app/core/event_sidebar.html"
+], function($, _, Backbone, eventTemplate, paginatorTemplate, eventSidebarTemplate) {
     var EVENT_API = '/api/v1/core/event/';
     window.Event = Backbone.Model.extend({
 	url: function(){
@@ -120,6 +121,19 @@ define([
 	    return this.fetch();
 	}
     });
+
+    EventSidebarView = Backbone.View.extend({
+	initialize: function(){
+	    this.render();
+	},
+	render: function(){
+	    // Compile the template using underscore
+	    var template = _.template(eventSidebarTemplate, {});
+	    // Load the compiled HTML into the Backbone "el"
+	    $('#content-sidebar').html( template );
+	    return this;
+	}
+    });
     
     EventView = Backbone.View.extend({
 	initialize: function(model){
@@ -174,10 +188,10 @@ define([
 		    var event_view = new EventView(object);
 		    $(container).append(event_view.render().el);
 		});
-		$('#container_events').html('');
-		$('#container_events').append(container);
+		$('#container-events').html('');
+		$('#container-events').append(container);
 		var template =  _.template(paginatorTemplate, collection);
-		$('#container_events').append(template);
+		$('#container-events').append(template);
 	    });
 	},
 	render: function() {
@@ -223,6 +237,7 @@ define([
     });
 
     var initialize = function(){
+	var eventSidebarView = new EventSidebarView();
 	window.app = new window.EventApp();
     };
 
