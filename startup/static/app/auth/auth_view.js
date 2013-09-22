@@ -33,10 +33,8 @@ define([
 	    // Maybe show a loading indicator...
 	    $.post($(this).attr('action'), $(this).serialize(), function(res){
 		// Do something with the response `res`
-		alert('sent.');
 		console.log(res);
 		logoutView();
-		console.log(res);
 		// Don't forget to hide the loading indicator!
 	    });
 	    return false; // prevent default action
