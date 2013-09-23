@@ -9,6 +9,7 @@ from django.contrib import auth
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.conf import settings
 import json
 
 class JsonResponse(HttpResponse):
@@ -20,7 +21,9 @@ class JsonResponse(HttpResponse):
 
 @ensure_csrf_cookie
 def index_view(request):
-    return render(request, 'core/base.html')
+#    import os
+#    index_path = os.path.join(settings.STATIC_ROOT, 'app/core/base.html')
+    return render(request, 'base.html')
 
 def all_filter_options_view(request):
     all_events = Event.objects.all()

@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',     
-    "text!app/core/event_template.js",
+    "text!app/core/event_template.html",
     "text!app/core/paginator.html",
     "text!app/core/event_sidebar.html"
 ], function($, _, Backbone, eventTemplate, paginatorTemplate, eventSidebarTemplate) {
