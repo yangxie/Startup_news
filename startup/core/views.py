@@ -11,18 +11,10 @@ from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.conf import settings
 import json
-
-class JsonResponse(HttpResponse):
-    def __init__(self, content={}, mimetype=None, status=None, content_type=None):
-        if not content_type:
-            content_type = 'application/json'
-        super(JsonResponse, self).__init__(json.dumps(content), mimetype=mimetype,
-                                           status=status, content_type=content_type)
+from common.JsonResponse import JsonResponse
 
 @ensure_csrf_cookie
 def index_view(request):
-#    import os
-#    index_path = os.path.join(settings.STATIC_ROOT, 'app/core/base.html')
     return render(request, 'base.html')
 
 def all_filter_options_view(request):

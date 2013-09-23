@@ -29,4 +29,5 @@ urlpatterns = patterns('',
     url(r'^signup/confirm/$', 'auth.views.signup_confirm'),
     url(r'^login/$', 'auth.views.login_view'),
     url(r'^logout/$', 'auth.views.logout_view'),
+    url(r'^event-url/$', 'eventadmin.views.event_url_process_view'),
 )
