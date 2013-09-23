@@ -1,0 +1,108 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>EventSonar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <script type="text/javascript" src="{% static 'lib/jquery/jquery-1.10.2.min.js' %}"></script>
+    <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="{% static 'lib/date.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/underscore/underscore-min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/backbone/backbone-min.js' %}"></script>
+    <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <style type="text/css">
+      body {
+	  font-family:"open sans";
+      }
+      .event {
+	  padding:10px 90px;
+	  margin: 7px;
+//	  background-color:#F5FFFA;
+	  
+//	  -webkit-border-radius: 5px;
+//	  -moz-border-radius: 5px;
+//	  -ms-border-radius: 5px;
+//	  -o-border-radius: 5px;
+//	  border-radius: 5px;
+
+	  border-bottom:1px solid #313030;	  
+
+//	  box-shadow: 3px 3px 10px 5px #000, 0 0 4px rgba(0, 0, 0, .5) inset;
+//	  -webkit-box-shadow: 3px 3px 10px 5px #000, 0 0 4px rgba(0, 0, 0, .5) inset;
+//	  -moz-box-shadow: 3px 3px 10px 5px #000, 0 0 4px rgba(0, 0, 0, .5) inset;
+      }
+      .event .media_title {
+	  font-size: 20px;
+	  font-weight: bold;
+	  color: #000000;  
+      }
+      .navbar {
+	  padding: 0 10%;
+	  opacity:0.8;
+      }
+      .navbar .navbar-inner {
+	    -moz-box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
+	    -webkit-box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
+	    -o-box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
+	    box-shadow: 0px 3px 2px 0px #333333, 0px 1px 10px 0px rgba(0, 0, 0, 0.0980392);
+      }
+      .nav-text {     
+	  font-family:"open sans";
+	  font-size: 16px;
+	  font-weight: bold;
+	  color: #000000;  
+      } 
+      .hoverable {
+	    cursor: pointer;
+      }
+      #container_body {
+	  padding-left: 10%;
+	  padding-right: 10%;
+      }
+      #content_sidebar {
+	  border-right:1px solid #313030;
+	  height: 800px;
+	  margin: 20px;
+      }
+
+    </style>
+  <body>
+    {% block header %}
+    <div id="content_header">
+      <div class="navbar">
+	<div class="navbar-inner">
+	  <div class="container-fluid">
+            <a class="brand">EventSonar</a>
+	    <div id="auth-div" class="nav-collapse pull-right">
+	    </div>
+	  </div>
+	</div>
+      </div>
+    </div>
+    {% endblock %}
+    <div class="container-fluid" id="container_body">
+      {% block content%}
+      <div class="row-fluid">
+	<div class="span3">
+	  {% block content_sidebar %}
+	  <!--Sidebar content-->
+	  <div id="content-sidebar">
+	  </div>
+	  {% endblock %}
+	</div>	
+	<div class="span6">
+	  <div id="container-events">
+	  </div>
+	  {% block content_body %}
+	  <!--Body content-->
+	  {% endblock %}
+	</div>
+      </div>
+      {% endblock %}
+      <script data-main="{% static 'event_app' %}" src="{% static 'require.js' %}"></script>
+    </div>
+  </body>
+</html>
