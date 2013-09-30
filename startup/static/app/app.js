@@ -1,18 +1,22 @@
-loadTemplate("../templates/menu.html", "menu");
-loadTemplate("../templates/events.html", "events");
-loadTemplate("../templates/eventadmin.html", "eventadmin");
-loadTemplate("../templates/pagination.html", "pagination");
-loadTemplate("../templates/event_filter.html", "event_filter");
+function loadJavascript(filename){
+    var fileref=document.createElement('script')
+    fileref.setAttribute("type","text/javascript")
+    fileref.setAttribute("src", filename)
+}
 
-loadTemplate("static/templates/menu.html", "menu");
-loadTemplate("static/templates/events.html", "events");
-loadTemplate("static/templates/eventadmin.html", "eventadmin");
-loadTemplate("static/templates/pagination.html", "pagination");
-loadTemplate("static/templates/event_filter.html", "event_filter");
+var loadTemplateFast = function(name) {
+    loadTemplate("static/templates/"+ name +".html", name);    
+    loadTemplate("../templates/"+ name +".html", name);
+}
+
+loadTemplateFast("menu");
+loadTemplateFast("events");
+loadTemplateFast("eventadmin");
+loadTemplateFast("pagination");
+loadTemplateFast("event_filter");
+loadTemplateFast("login");
 
 App = Ember.Application.create();
-
-
 
 //App.LSAdapter = DS.LSAdapter.extend({
 //    namespace : 'event_emberjs'

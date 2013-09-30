@@ -5,8 +5,10 @@
 <title>Homepage</title>
   <link rel="stylesheet" href="{{ STATIC_URL }}lib/ember/css/normalize.css">
   <link rel="stylesheet" href="{{ STATIC_URL }}lib/ember/css/style.css">
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css">
   <link rel="stylesheet" href="{{ STATIC_URL }}lib/bootstrap/css/bootstrap.min.css" media="screen">
+
+  <!-- Custom -->
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css">
 </head>
 <body>
   <script src="{{ STATIC_URL }}lib/ember/js/libs/jquery-1.9.1.js"></script>
@@ -19,7 +21,9 @@
   <script src="{{ STATIC_URL }}lib/ember/js/custom/load_template.js"></script>
   <script src="{{ STATIC_URL }}lib/ember/js/custom/add_csrf.js"></script>
 
+  <!-- Custom -->
   <script src="{{ STATIC_URL }}app/app.js"></script>
+
   <script src="{{ STATIC_URL }}app/models/event.js"></script>
   <script src="{{ STATIC_URL }}app/models/menu.js"></script>
   <script src="{{ STATIC_URL }}app/controllers/pagination_mixin.js"></script>
@@ -28,13 +32,13 @@
   <script src="{{ STATIC_URL }}app/controllers/eventadmin_controller.js"></script>
   <script src="{{ STATIC_URL }}app/controllers/menu_controller.js"></script>
   <script src="{{ STATIC_URL }}app/controllers/menu_item_controller.js"></script>
+  <script src="{{ STATIC_URL }}app/controllers/login_controller.js"></script>
   <script src="{{ STATIC_URL }}app/views/pagination_view.js"></script>
+  <script src="{{ STATIC_URL }}app/views/login_view.js"></script>
   <script src="{{ STATIC_URL }}app/routes/events_route.js"></script>
   <script src="{{ STATIC_URL }}app/routes/menu_route.js"></script>
   <script src="{{ STATIC_URL }}app/routes/events_page_route.js"></script>
   <script src="{{ STATIC_URL }}app/routes/event_filter_route.js"></script>
   <script src="{{ STATIC_URL }}lib/bootstrap/js/bootstrap.min.js"></script>
-
-
 </body>
 </html>
