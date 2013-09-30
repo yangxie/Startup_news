@@ -1,0 +1,6 @@
+<form id="login-form" class="navbar-form Form AuthForm SignupForm" method="POST" accept-charset="utf-8" action="/login/">
+  <input id="id_email" name="email" type="text" placeholder="Email Address" value="" class="input-medium">
+  <input id="id_password" name="password" type="password" placeholder="Password" value="" class="input-medium">
+  <input type="submit" value="Login" class="btn btn-primary">
+  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrftoken }}"/>
+</form>

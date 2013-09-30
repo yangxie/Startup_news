@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.models import CharField, TextField, DateField, TimeField, SmallIntegerField
+from django.forms.models import model_to_dict
+from rest_framework import serializers
 
 class Event(models.Model):
     name = CharField(max_length=100)
@@ -21,3 +23,14 @@ class Event(models.Model):
     
     def __unicode__(self):
         return self.name
+
+    def to_dict(self):
+        return model_to_dict(self, fields=[], exclude=[])
+
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ('id', 'name', 'description', 'category', 'start_date', 'end_date',
+                  'start_time', 'end_time', 'place', 'address_line1',
+                  'address_line2', 'city', 'state', 'postal_code', 'URL',
+                  'coupon', 'status')

@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from core.models import Event
 from tastypie.api import Api
 from core.resources import EventResource
+from core import views
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -30,4 +31,8 @@ urlpatterns = patterns('',
     url(r'^login/$', 'auth.views.login_view'),
     url(r'^logout/$', 'auth.views.logout_view'),
     url(r'^event-url/$', 'eventadmin.views.event_url_process_view'),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^$', views.HomeView.as_view()),
+    url(r'^events/$', views.EventsView.as_view()),
+    url(r'^events/(?P<pk>\d+)/$', views.EventView.as_view()),
 )

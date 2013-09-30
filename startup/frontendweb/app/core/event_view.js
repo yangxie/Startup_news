@@ -6,7 +6,7 @@ define([
     "text!app/core/paginator.html",
     "text!app/core/event_sidebar.html"
 ], function($, _, Backbone, eventTemplate, paginatorTemplate, eventSidebarTemplate) {
-    var EVENT_API = '/api/v1/core/event/';
+    var EVENT_API = '/api/v1/events/';
     window.Event = Backbone.Model.extend({
 	url: function(){
 	    return this.get('resource_uri') || this.collection.url;

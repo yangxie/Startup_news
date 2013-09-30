@@ -17,6 +17,7 @@ from common.JsonResponse import JsonResponse
 def index_view(request):
     return render(request, 'base.html')
 
+
 def all_filter_options_view(request):
     all_events = Event.objects.all()
     locations = {}
@@ -30,3 +31,22 @@ def all_filter_options_view(request):
     response_data['locations'] = locations.keys()
     response_data['categories'] = categories.keys()
     return JsonResponse(response_data)
+
+from core.models import EventSerializer
+from django.http import Http404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import generics
+from django.views.generic import TemplateView
+
+class EventsView(generics.ListCreateAPIView):
+    model = Event
+    serializer_class = EventSerializer
+
+class EventView(generics.RetrieveUpdateDestroyAPIView):
+    model = Event
+    serializer_class = EventSerializer
+
+class HomeView(TemplateView):
+    template_name = 'home.html'

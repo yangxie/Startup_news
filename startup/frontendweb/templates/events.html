@@ -1,0 +1,40 @@
+<div id="event-list">
+  {{#each event in controller.paginatedContent itemController="event"}}
+  <div>
+    <div class="content_body">
+      <div class="event">
+	<div class="event-header">
+          <div class="event-name media_title">
+	    {{ name }}
+          </div>
+	</div>
+	<div class="event-detail">
+          <div class="event-date">
+	    <i class="icon-calendar"></i>
+	    {{#if sameday }}
+	    Date: {{ start_date }} at {{ start_time }} to {{ end_time }}
+	    {{ else }}
+	    Date: {{ start_date }} at {{ start_time }}
+	    to {{ end_date }} at {{ end_time }}
+	    <% } %>
+	    {{/if}}
+          </div>
+          <div class="event-address">
+	    <i class="icon-tags"></i>
+	    Address: {{ address_line1 }} {{ city }} {{state}}
+	  </div>
+          <div class="event_category_<%= id %>">
+	    <i class="icon-list"></i>
+	    Category: {{ category }}
+	  </div>
+	</div>
+      </div>
+    </div>
+  </div>
+  {{/each}}
+  <span name="prev">{{#linkTo 'events.page' prevPage target="controller"}}Prev{{/linkTo}}</span>
+  {{#each pages}}
+  {{view App.PaginationView contentBinding="this" target="controller"}}
+  {{/each}}
+  <span name="next">{{#linkTo 'events.page' nextPage target="controller"}}Next{{/linkTo}}</span>
+</div>  

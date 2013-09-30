@@ -1,0 +1,7 @@
+<div>
+  <form id="event-url-form" {{action "parseEvent" on="submit"}}>
+    <span>Url: {{view Ember.TextField valueBinding="event-url"}}</span>
+    <span><input type="submit" class="btn btn-primary"></input></span>
+  </form>
+</div>
+{{outlet}}

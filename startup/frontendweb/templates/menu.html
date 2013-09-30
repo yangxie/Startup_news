@@ -1,0 +1,38 @@
+<div id="content_header">
+  <div class="navbar">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand">EventSonar</a>
+	<div id="menu_item-div" class="nav-collapse pull-left">
+	  <ul class="nav">
+	    {{#each itemController="menu_item"}}
+	    <li {{ bind-attr class="isactive:active"}}>
+	      {{#link-to url}}{{name}}{{/link-to}}
+	    </li>
+	    {{/each}}
+	  </ul>
+	</div>
+	<div id="auth-div" class="nav-collapse pull-right">
+	  {{outlet auth}}
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid" id="container_body">
+  <div class="row-fluid">
+    <div class="span3">
+      <!--Sidebar content-->
+      <div id="content-sidebar">
+	{{outlet sidebar}}
+      </div>
+    </div>	
+    <div class="span8">
+      <div id="container-events">
+	{{outlet main}}
+      </div>
+      <!--Body content-->
+    </div>
+  </div>
+</div>

@@ -180,3 +180,5 @@ SOUTH_MIGRATION_MODULES = {
 LIB_ROOT = os.path.join(SITE_ROOT, 'lib')
 import sys
 sys.path.append(LIB_ROOT)
+
+TASTYPIE_DEFAULT_FORMATS = ['json']

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Homepage</title>
+  <link rel="stylesheet" href="{{ STATIC_URL }}lib/ember/css/normalize.css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}lib/ember/css/style.css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}lib/bootstrap/css/bootstrap.min.css" media="screen">
+</head>
+<body>
+  <script src="{{ STATIC_URL }}lib/ember/js/libs/jquery-1.9.1.js"></script>
+  <script src="{{ STATIC_URL }}lib/ember/js/libs/handlebars-1.0.0.js"></script>
+  <script src="{{ STATIC_URL }}lib/ember/js/libs/ember-1.0.0.js"></script>
+  <script src="{{ STATIC_URL }}lib/ember/js/libs/ember-data.js"></script>
+  <script src="{{ STATIC_URL }}lib/ember/js/libs/localstorage_adapter.js"></script>
+  <script src="{{ STATIC_URL }}lib/ember-data-django-rest-adapter/lib/serializer.js"></script>
+  <script src="{{ STATIC_URL }}lib/ember-data-django-rest-adapter/lib/adapter.js"></script>
+  <script src="{{ STATIC_URL }}lib/ember/js/custom/load_template.js"></script>
+  <script src="{{ STATIC_URL }}lib/ember/js/custom/add_csrf.js"></script>
+
+  <script src="{{ STATIC_URL }}app/app.js"></script>
+  <script src="{{ STATIC_URL }}app/models/event.js"></script>
+  <script src="{{ STATIC_URL }}app/models/menu.js"></script>
+  <script src="{{ STATIC_URL }}app/controllers/pagination_mixin.js"></script>
+  <script src="{{ STATIC_URL }}app/controllers/event_controller.js"></script>
+  <script src="{{ STATIC_URL }}app/controllers/events_controller.js"></script>
+  <script src="{{ STATIC_URL }}app/controllers/eventadmin_controller.js"></script>
+  <script src="{{ STATIC_URL }}app/controllers/menu_controller.js"></script>
+  <script src="{{ STATIC_URL }}app/controllers/menu_item_controller.js"></script>
+  <script src="{{ STATIC_URL }}app/views/pagination_view.js"></script>
+  <script src="{{ STATIC_URL }}app/routes/events_route.js"></script>
+  <script src="{{ STATIC_URL }}app/routes/menu_route.js"></script>
+  <script src="{{ STATIC_URL }}app/routes/events_page_route.js"></script>
+  <script src="{{ STATIC_URL }}app/routes/event_filter_route.js"></script>
+  <script src="{{ STATIC_URL }}lib/bootstrap/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>

@@ -10,7 +10,7 @@ class EventResource(ModelResource):
         queryset = Event.objects.all()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
-        resource_name = 'core/event'
+        resource_name = 'events'
         authorization = DjangoAuthorization()
         filtering = {
             'category': ['exact'],
@@ -18,3 +18,7 @@ class EventResource(ModelResource):
             'city' : ['exact']
         }
         paginator_class = Paginator
+
+        # This option is necessary cause ember-data expects
+        # return data after a POST or PUT
+        always_return_data = True
