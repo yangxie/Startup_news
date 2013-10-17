@@ -48,5 +48,20 @@ class EventView(generics.RetrieveUpdateDestroyAPIView):
     model = Event
     serializer_class = EventSerializer
 
-class HomeView(TemplateView):
-    template_name = 'home.html'
+#class HomeView(TemplateView):
+#    template_name = 'home.html'
+
+def get_templates_from_file(template_name):
+    import os
+    filepath = os.path.join(settings.STATIC_ROOT, "templates", template_name + ".html")
+    filecontent = '<script type="text/x-handlebars" data-template-name="%s">' % template_name
+    fin = open(filepath, "r")
+    for line in fin:
+        filecontent = filecontent + line + "\n"
+    fin.close()
+    filecontent = filecontent + "</script>"
+    return filecontent
+
+@ensure_csrf_cookie
+def home_view(request):
+    return render(request, 'home.html', {})

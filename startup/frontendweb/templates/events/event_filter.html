@@ -1,0 +1,19 @@
+<ul class="list-group">
+  <li class="list-group-item">Date</li>
+  <li class="list-group-item"><a href="/events/filter/?date=no_filter">All</a></li>
+  <li class="list-group-item"><a href="/events/filter/?date=today">Today</a></li>
+  <li class="list-group-item"><a href="/events/filter/?date=week">This week</a></li>
+  <li class="list-group-item"><a href="/events/filter/?date=next_week">Next week</a></li>
+</ul>
+
+{% for option_type, values in options.items %}
+<ul class="list-group">
+  <li class="list-group-item">{{ option_type | title }}</li>
+  <li class="list-group-item"><a href="/events/">All</a></li>
+  {% for option in values %}
+  {% if option != '' %}
+  <li class="list-group-item"><a href="/events/filter/?{{ option_type }}={{ option }}">{{ option }}</a></li>
+  {% endif %}
+  {% endfor %}
+</ul>
+{% endfor %}

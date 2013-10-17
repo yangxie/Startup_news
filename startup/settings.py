@@ -137,7 +137,8 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'core',
-    'auth'
+    'auth',
+    "jstemplate"
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -182,3 +183,5 @@ import sys
 sys.path.append(LIB_ROOT)
 
 TASTYPIE_DEFAULT_FORMATS = ['json']
+
+JSTEMPLATE_DIRS = [os.path.join(STATIC_ROOT, "templates")]

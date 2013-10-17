@@ -1,3 +1,5 @@
+{% load jstemplate %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,8 +22,16 @@
   <script src="{{ STATIC_URL }}lib/ember-data-django-rest-adapter/lib/adapter.js"></script>
   <script src="{{ STATIC_URL }}lib/ember/js/custom/load_template.js"></script>
   <script src="{{ STATIC_URL }}lib/ember/js/custom/add_csrf.js"></script>
+  <script src="{{ STATIC_URL }}require.js"></script>
 
   <!-- Custom -->
+  
+  {% handlebarsjs 'menu' precompile %}
+  {% handlebarsjs 'events' precompile %}
+  {% handlebarsjs 'eventadmin' precompile %}
+  {% handlebarsjs 'pagination' precompile %}
+  {% handlebarsjs 'login' precompile %}
+
   <script src="{{ STATIC_URL }}app/app.js"></script>
 
   <script src="{{ STATIC_URL }}app/models/event.js"></script>
@@ -39,6 +49,7 @@
   <script src="{{ STATIC_URL }}app/routes/menu_route.js"></script>
   <script src="{{ STATIC_URL }}app/routes/events_page_route.js"></script>
   <script src="{{ STATIC_URL }}app/routes/event_filter_route.js"></script>
+
   <script src="{{ STATIC_URL }}lib/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

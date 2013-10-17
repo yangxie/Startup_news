@@ -1,0 +1,53 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    {% for e in events %}
+    <div>
+      <div class="content_body">
+	<div class="event">
+	  <div class="event-header">
+	    <div class="event-name media_title">
+	      {{ e.name }}
+	    </div>
+	  </div>
+	  <div class="event-detail">
+	    <div class="event-date">
+	      <span class="glyphicon glyphicon-calendar"></span>
+	      {% if e.start_date == e.end_date  %}
+	      Date: {{ e.start_date }} at {{ e.start_time }} to {{ e.end_time }}
+	      {% else %}
+	      Date: {{ e.start_date }} at {{ e.start_time }}
+	      to {{ e.end_date }} at {{ e.end_time }}
+	      {% endif %}
+	    </div>
+	    <div class="event-address">
+	      <span class="glyphicon glyphicon-tags"></span>
+	      Address: {{ e.address_line1 }} {{ e.city }} {{ e.state }}
+	    </div>
+	    <div class="event_category_<%= id %>">
+	      <span class="glyphicon glyphicon-th"></span>
+	      Category: {{ e.category }}
+	    </div>
+	  </div>
+	</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>  
+  <div>
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+	<ul class="pagination">
+	  {% if prev_page > 0 %}
+	  <li><a href="/events/?page={{ prev_page }}">&laquo;</a></li>
+	  {% endif %}
+	  {% for page in pages %}
+	  <li><a href="/events/?page={{ page }}">{{ page }}</a></li>
+	  {% endfor %}
+	  {% if next_page > 0 %}
+	  <li><a href="/events/?page={{ next_page }}">&raquo;</a></li>
+	  {% endif %}
+	</ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+{% autoescape on %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:og="http://ogp.me/ns#">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ page_title }}</title>
+    <meta name="title" content="{{ page_title }}"/>
+    <meta name="description" content="{{ meta_description }}"/>
+    <meta name="keywords" content="{{ meta_keywords }}"/>
+    <meta property="og:title" content="{{ page_title }}" />
+    <meta property="og:image" content="{{ page_image_url|safe }}" />
+    <meta property="og:description" content="{{ meta_description }}" />
+    <meta property="og:site_name" content="trustleaf.com"/>
+    <meta property="og:type" content="{{ og_type }}"/>
+    {% if is_private %}
+    <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    {% endif %}
+
+    {% load staticfiles %}
+    <link type="text/css" href="{% static "lib/bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+    <link rel="stylesheet/less" type="text/css" href="{% static "css/style.css" %}" />
+    <link rel="stylesheet/less" type="text/css" href="{% static "dev/css/tl-styles.less" %}" />
+    <link type="text/css" href="{% static "lib/datepicker/css/datepicker.css" %}" rel="stylesheet">
+    <link type="text/css" href="{% static "lib/bootstrap-select/bootstrap-select.css" %}" rel="stylesheet">
+
+    <script type="text/javascript" src="{% static "lib/jquery/jquery-1.10.2.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib/bootstrap/js/bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib/less/less-1.4.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib/datepicker/js/bootstrap-datepicker.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib/bootstrap-select/bootstrap-select.js" %}"></script>
+</head>
+
+<body>
+    {% include "common/header.html" %}
+
+    {{ contents|safe }}
+
+    {% include "common/footer.html" %}
+    {{ inpage_js|safe }}
+</body>
+</html>
+{% endautoescape %}
