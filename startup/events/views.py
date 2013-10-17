@@ -26,13 +26,15 @@ def all_filter_options():
     options['category'] = categories.keys()
     return options
 
-def show_events(request, paginator, page):
+def show_events(request, events, page):
      c = Context()
      c['request'] = request
      sidebar = render_to_string("events/event_filter.html",
                                 {'options': all_filter_options()},
                                 context_instance=RequestContext(request))
-     
+     EVENT_PER_PAGE = 10
+     paginator = Paginator(events, EVENT_PER_PAGE)
+
      page = int(page)
      prev_page = page - 1
      next_page = page + 1
@@ -56,11 +58,9 @@ def show_events(request, paginator, page):
                                context_instance=RequestContext(request))
 
 def view_events(request):
-     EVENT_PER_PAGE = 10
      page = get_parameter(request, 'page', 1)
      events = Event.objects.all()
-     p = Paginator(events, EVENT_PER_PAGE)
-     return show_events(request, p, page)
+     return show_events(request, events, page)
 
 def filter_event_by_date(shift_days, window_range, kwargs):
      FOREVER = -1
@@ -109,16 +109,5 @@ def view_events_filter(request):
           if (category_filter_option != ''):
                filter_kwargs = add_filter_by_option(filter_kwargs, filter_key, category_filter_option)
      events = Event.objects.filter(**filter_kwargs)
-     
 
-     return show_events(request, events)
-
-
-def view_event_admin(request):
-     c = Context()
-     c['request'] = request
-     sidebar = ''
-     body = ''
-     c['contents'] = render_to_string("events/event_admin.html", {'body': body, 'sidebar': sidebar}, context_instance=RequestContext(request))
-     return render_to_response('common/base.html', c, context_instance=RequestContext(request))
-
+     return show_events(request, events, 1)

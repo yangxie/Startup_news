@@ -39,4 +39,5 @@ urlpatterns = patterns('',
 #    url(r'^events/$', views.EventsView.as_view()),
 #    url(r'^events/(?P<pk>\d+)/$', views.EventView.as_view()),
     url(r'^events/', include('events.urls')),
+    url(r'^eventadmin/', include('eventadmin.urls')),
 )

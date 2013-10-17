@@ -2,6 +2,10 @@ body {
     font-family:"open sans";
 }
 
+.header-buffer {
+    padding: 20px;
+}
+
 .event {
     padding:10px 90px;
     margin: 7px;

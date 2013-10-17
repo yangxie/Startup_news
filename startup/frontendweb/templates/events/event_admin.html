@@ -1,3 +1,4 @@
+<div class="header-buffer"></div>
 <div class="container">
   <div id="event-list">
     <div class="row">
@@ -6,8 +7,10 @@
       </div>
       <div class="col-md-7">
 	{{ body }}
-	<input class="" placeholder="url address" type="text"></input>
-	<a href="" class="">submit</a>
+	<form action="/eventadmin/add-event/" method="post">{% csrf_token %}
+	  <input name="event-url" class="" placeholder="url address" type="text"></input>
+	  <input type="submit" value="Submit" />
+	</form>
       </div>
     </div>
   </div>
