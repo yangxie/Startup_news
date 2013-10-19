@@ -34,10 +34,14 @@ def crawlEventBrite(url):
     end_time = end_time.split('T')
     end_date = end_time[0]
     end_time = end_time[1]
-    event = Event.objects.create(name=name, address_line1=address, city=location,
+
+    event, created = Event.objects.get_or_create(name=name, address_line1=address,
+                                 category='GE',
+                                 address_line2=' ',
+                                 city=location,
                                  state=region, start_time=start_time,
                                  end_time=end_time, start_date=start_date,
-                                 end_date=end_date)
+                                 end_date=end_date, URL=url)
     return event
 
 def test():

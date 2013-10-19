@@ -86,7 +86,7 @@ def date_filter_map(key):
      table['today'] = [0, 1]
      table['week'] = [0, 7]
      table['next_week'] = [7, 7]
-     table['no_filter'] = [7, -1]
+     table['no_filter'] = [0, -1]
      return get_value_or_none(table, key)
 
 def add_filter_by_option(filter_args, field, value):

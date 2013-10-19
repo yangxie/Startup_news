@@ -1,0 +1,72 @@
+<div class="header-buffer">
+</div>
+<div class="row">
+  <div class="col-lg-push-3 col-lg-6">
+    <div class="panel panel-default">
+      <div class="panel-body">
+	<form method="post" action="/eventadmin/edit-event/">{% csrf_token %}
+	  <div class="form-group">
+	    {{ form.name }}
+	  </div>
+	  <div class="form-group">
+	    {{ form.category }}
+	  </div>
+	  <div class="form-group">
+	    {{ form.address_line1 }}
+	  </div>
+	  <div class="form-group">
+	    {{ form.address_line2 }}
+	  </div>
+	  <div class="form-group">
+	    {{ form.city }}
+	  </div>
+	  <div class="form-group">
+	    {{ form.state }}
+	  </div>
+	  <div class="form-group">
+	    {{ form.postal_code }}
+	  </div>
+	  <div class="form-group">
+	    {{ form.URL }}
+	  </div>
+	  <div class="form-group">
+	    <div class="input-group date">
+	      <span class="input-group-addon glyphicon glyphicon-calendar"></span>
+	      {{ form.start_date }}
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="input-group input-append date">
+	      <span class="input-group-addon glyphicon glyphicon-calendar"></span>
+	      {{ form.end_date }}
+	    </div>
+	  </div>
+	  <p>
+	    <button type="submit" class="btn btn-default">Submit</button>
+	  </p>	  
+	  {% for field in form %}
+	  {% if field.errors %} 
+	  <div class="alert alert-danger">{{ field.errors }}</div>
+	  {% endif %} 
+	  {% endfor %}
+	  {% if form_msg %} 
+	  <div class="alert alert-success">{{ form_msg }}</div>
+	  {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+	$('#id_start_date').datepicker({
+	    format: 'mm/dd/yyyy',
+	    startDate: '0d'
+	});
+	$('#id_end_date').datepicker({
+	    format: 'mm/dd/yyyy',
+	    endDate: '0d'
+	});
+	$('.selectpicker').selectpicker();
+    });
+  
+</script>
