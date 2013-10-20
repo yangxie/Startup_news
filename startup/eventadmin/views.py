@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.template import Context
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -21,15 +22,9 @@ from eventadmin.lib import crawlEventBrite
 from django import forms
 
 class EventEditForm(forms.Form):
-    GENERAL = 'GE'
-    CONFERENCE = 'CO'
-    CATEGORY_CHOICES = (
-        (GENERAL, 'General'),
-        (CONFERENCE, 'Conference'),
-    )
     category = forms.ChoiceField(
         label='Category',
-        choices=CATEGORY_CHOICES, initial=CONFERENCE,
+        choices=Event.CATEGORY_CHOICES, initial=Event.CONFERENCE,
         widget=forms.Select(attrs={'class': 'selectpicker form-control', 'placeholder': 'Category'}),
         error_messages={'required': 'Please select a category'}
         )
@@ -88,44 +83,40 @@ class EventEditForm(forms.Form):
          error_messages={'required': 'Please choose the end date', 'invalid': 'Please choose a valid date'})
 
 def view_add_event(request):
-#    import json
-#    response_data = {}
-#    response_data['address'] = 'street'
-#    response_data['category'] = 'restaurant'
     url = request.POST['event-url']
-    response_data = crawlEventBrite(url)
+    event = crawlEventBrite(url)
 #    return JsonResponse([response_data.to_dict()])
-    c = Context()
-    c['request'] = request
-    c['contents'] = render_to_string(
-        "events/event_edit.html",
-        {'form': EventEditForm(response_data.to_dict())}, context_instance=RequestContext(request))
-    return render_to_response('common/base.html', c, context_instance=RequestContext(request))
+    return HttpResponseRedirect('/eventadmin/edit-event/' + str(event.id) + '/')
 
-def view_edit_event(request):
+def view_edit_event(request, event_id):
     operation = {'success': True, 'msg': ''}
+    try:
+        event = Event.objects.get(pk=event_id)
+    except Event.DoesNotExist:
+        operation['success'] = False
+        operation['msg'] = 'Event does not exist.'
+        raise Http404
+    
     if request.method == 'POST':
         form = EventEditForm(request.POST)
-        if (form.is_valid()):
-            event = Event.objects.filter(name=form.cleaned_data['name'])
-            if not event.exists():
-                event = event[0]
-            
-                for attr, value in form.cleaned_data.iteritems(): 
-                    setattr(event, attr, value)
-                try:
-                    event.save()
-                    operation['success'] = True
-                    operation['msg'] = 'Successfully updated the event.'
-                except:
-                    operation['success'] = False
-                    operation['msg'] = 'Unkown errors '
-            
+        if (form.is_valid() and event_id > 0):
+            for attr, value in form.cleaned_data.iteritems(): 
+                setattr(event, attr, value)
+            try:
+                event.save()
+                operation['success'] = True
+                operation['msg'] = 'Successfully updated the event.'
+            except:
+                operation['success'] = False
+                operation['msg'] = 'Unkown errors.'
+    else:
+        form = EventEditForm(event.to_dict())
+
     c = Context()
     c['request'] = request
     c['contents'] = render_to_string(
         "events/event_edit.html",
-        {'form': form, 'form_msg': operation['msg']},
+        {'form': form, 'form_msg': operation['msg'], 'event_id': event_id},
         context_instance=RequestContext(request))
     return render_to_response('common/base.html', c, context_instance=RequestContext(request))
             

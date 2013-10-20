@@ -3,7 +3,17 @@ from django.db.models import CharField, TextField, DateField, TimeField, SmallIn
 from django.forms.models import model_to_dict
 from rest_framework import serializers
 
+
 class Event(models.Model):
+    GENERAL = 'GE'
+    CONFERENCE = 'CO'
+    VENTURE = 'VE'
+    CATEGORY_CHOICES = (
+        (GENERAL, 'General'),
+        (CONFERENCE, 'Conference'),
+        (VENTURE, 'Venture Capital'),
+        )
+
     name = CharField(max_length=100)
     description = TextField(blank=True, null=True)
     category = CharField(max_length=50)
@@ -26,6 +36,12 @@ class Event(models.Model):
 
     def to_dict(self):
         return model_to_dict(self, fields=[], exclude=[])
+    
+    def category_full(self):
+        for choices in Event.CATEGORY_CHOICES:
+            if (choices[0] == self.category):
+                return choices[1]
+
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:

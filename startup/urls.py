@@ -8,7 +8,7 @@ from django.views.generic import TemplateView
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
-#admin.site.register(Event)
+# admin.site.register(Event)
 
 # Add tastypie resources.
 # v1_api = Api(api_name='v1')

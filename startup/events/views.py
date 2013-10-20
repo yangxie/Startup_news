@@ -111,3 +111,12 @@ def view_events_filter(request):
      events = Event.objects.filter(**filter_kwargs)
 
      return show_events(request, events, 1)
+
+
+def view_delete_event(request, event_id):
+     try:
+          event = Event.objects.get(pk=event_id)
+          event.delete()
+     except Event.DoesNotExist:
+          pass
+     return view_events(request)
