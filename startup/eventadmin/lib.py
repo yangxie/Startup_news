@@ -37,7 +37,7 @@ def crawlEventBrite(url):
 
     try:
         event, created = Event.objects.get_or_create(name=name, address_line1=address,
-                                                     category='GE',
+                                                     category='General',
                                                      address_line2=' ',
                                                      city=location,
                                                      state=region, start_time=start_time,
@@ -45,7 +45,7 @@ def crawlEventBrite(url):
                                                      end_date=end_date, URL=url)
     except:
         event = Event.objects.filter(name=name, address_line1=address,
-                                     category='GE',
+                                     category='General',
                                      address_line2=' ',
                                      city=location,
                                      state=region, start_time=start_time,

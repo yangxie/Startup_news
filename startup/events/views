@@ -1,0 +1,12 @@
+..	
+Debugger entered--Lisp error: (error "Cannot return from the debugger in an error")
+  completing-read("Find file: " read-file-name-internal file-exists-p confirm-after-completion "~/public/django_web/startup/Startup_news/startup/events/" file-name-history "~/public/django_web/startup/Startup_news/startup/events/")
+  read-file-name("Find file: " nil "/home/hongtaoh/public/django_web/startup/Startup_news/startup/events/" confirm-after-completion)
+  find-file-read-args("Find file: " confirm-after-completion)
+  byte-code("\300\301\302 \"\207" [find-file-read-args "Find file: " confirm-nonexistent-file-or-buffer] 3)
+  call-interactively(find-file nil nil)
+  completing-read("Find file: " read-file-name-internal file-exists-p confirm-after-completion "~/public/django_web/startup/Startup_news/startup/events/" file-name-history "~/public/django_web/startup/Startup_news/startup/events/")
+  read-file-name("Find file: " nil "/home/hongtaoh/public/django_web/startup/Startup_news/startup/events/" confirm-after-completion)
+  find-file-read-args("Find file: " confirm-after-completion)
+  byte-code("\300\301\302 \"\207" [find-file-read-args "Find file: " confirm-nonexistent-file-or-buffer] 3)
+  call-interactively(find-file nil nil)

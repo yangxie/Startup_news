@@ -3,11 +3,10 @@ from django.db.models import CharField, TextField, DateField, TimeField, SmallIn
 from django.forms.models import model_to_dict
 from rest_framework import serializers
 
-
 class Event(models.Model):
-    GENERAL = 'GE'
-    CONFERENCE = 'CO'
-    VENTURE = 'VE'
+    GENERAL = 'General'
+    CONFERENCE = 'Conference'
+    VENTURE = 'Venture Capital'
     CATEGORY_CHOICES = (
         (GENERAL, 'General'),
         (CONFERENCE, 'Conference'),
