@@ -19,7 +19,9 @@ def get_filter_options(request):
      filter_options = {}
      for filter_key in filter_keys:
           filter_option = request.session.get('filter_' + filter_key, '')
-          filter_options[filter_key] = filter_option
+          if (filter_option != ''):
+               filter_options[filter_key] = filter_option
+#     return filter_options
      return to_readable_options(filter_options)
 
 def all_filter_options():
