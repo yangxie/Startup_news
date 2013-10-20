@@ -9,7 +9,7 @@
 {% for option_type, values in options.items %}
 <ul class="list-group">
   <li class="list-group-item">{{ option_type | title }}</li>
-  <li class="list-group-item"><a href="/events/">All</a></li>
+  <li class="list-group-item"><a href="/events/filter/?{{ option_type }}=no_filter">All</a></li>
   {% for option in values %}
   {% if option != '' %}
   <li class="list-group-item"><a href="/events/filter/?{{ option_type }}={{ option }}">{{ option }}</a></li>

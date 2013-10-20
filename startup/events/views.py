@@ -31,7 +31,13 @@ def show_events(request, events, page):
      c['request'] = request
      sidebar = render_to_string("events/event_filter.html",
                                 {'options': all_filter_options()},
-                                context_instance=RequestContext(request))
+                                context_instance=RequestContext(request))     
+
+     filter_options = get_filter_options(request)
+     header = render_to_string("events/event_header.html",
+                               {'filter_options': filter_options},
+                               context_instance=RequestContext(request))     
+
      EVENT_PER_PAGE = 10
      paginator = Paginator(events, EVENT_PER_PAGE)
 
@@ -52,7 +58,9 @@ def show_events(request, events, page):
                               },
                               context_instance=RequestContext(request))
      c['contents'] = render_to_string("events/events.html",
-                                      {'body': body, 'sidebar': sidebar},
+                                      {'body': body,
+                                       'sidebar': sidebar,
+                                       'header': header},
                                       context_instance=RequestContext(request))
      return render_to_response('common/base.html', c,
                                context_instance=RequestContext(request))
@@ -90,28 +98,55 @@ def date_filter_map(key):
      return get_value_or_none(table, key)
 
 def add_filter_by_option(filter_args, field, value):
-     filter_args[field + '__exact'] = value
+     if (value != 'no_filter'):
+          filter_args[field + '__exact'] = value
      return filter_args
+
+def set_filter_option(request):
+     filter_keys = ['category', 'city', 'date']
+     for filter_key in filter_keys:
+          filter_option = get_parameter(request, filter_key, '')
+          if (filter_option != ''):
+               request.session['filter_' + filter_key] = filter_option
+
+def to_readable_options(filter_options):
+     ret = {}
+     for key, value in filter_options.items():
+          ret[key] = unicode.replace(value, '_', ' ')
+     return ret
+
+def get_filter_options(request):
+     filter_keys = ['category', 'city', 'date']
+     filter_options = {}
+     for filter_key in filter_keys:
+          filter_option = request.session.get('filter_' + filter_key, '')
+          filter_options[filter_key] = filter_option
+     return to_readable_options(filter_options)
+     
+def get_filter_kwargs(request):
+     filter_keys = ['category', 'city', 'date']
+     filter_kwargs = {}
+     for filter_key in filter_keys:
+          filter_option = request.session.get('filter_' + filter_key, '')
+          if (filter_option != ''):
+               if (filter_key == 'date'):
+                    add_days = date_filter_map(filter_option)
+                    filter_kwargs = filter_event_by_date(add_days[0], add_days[1], filter_kwargs)
+               else:
+                    filter_kwargs = add_filter_by_option(filter_kwargs, filter_key, filter_option)
+     return filter_kwargs
 
 def view_events_filter(request):
      events = []
      date_filter_option = get_parameter(request, 'date', '')
 
      filter_keys = ['category', 'city']
-     filter_kwargs = {}
-
-     add_days = date_filter_map(date_filter_option)
-     if (add_days != None):
-          filter_kwargs = filter_event_by_date(add_days[0], add_days[1], filter_kwargs)
-
-     for filter_key in filter_keys:
-          category_filter_option = get_parameter(request, filter_key, '')
-          if (category_filter_option != ''):
-               filter_kwargs = add_filter_by_option(filter_kwargs, filter_key, category_filter_option)
+     set_filter_option(request)
+     filter_kwargs = get_filter_kwargs(request)
+     print filter_kwargs
      events = Event.objects.filter(**filter_kwargs)
 
      return show_events(request, events, 1)
-
 
 def view_delete_event(request, event_id):
      try:

@@ -1,0 +1,6 @@
+{% for key, value in filter_options.items %}
+{% if value != 'no filter' %}
+<span class="label label-info"><a style="color:white" href="/events/filter/?{{ key }}=no_filter">{{ key | title }} : {{ value | title }} </a></span> &nbsp;
+{% endif %}
+{% endfor %}
+<p>
